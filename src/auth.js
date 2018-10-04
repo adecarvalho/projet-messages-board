@@ -21,7 +21,6 @@ firebase.auth().onAuthStateChanged(user => {
 		}
 
 		store.commit("SET_USER", zeuser)
-		store.commit("IS_LOGIN", true)
 
 		db.collection("users")
 			.doc(zeuser.id)
@@ -30,7 +29,6 @@ firebase.auth().onAuthStateChanged(user => {
 		router.push("/sujets")
 	} else {
 		store.commit("SET_USER", null)
-		store.commit("IS_LOGIN", false)
 		router.push("/")
 	}
 })

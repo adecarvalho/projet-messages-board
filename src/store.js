@@ -11,6 +11,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
+		posts: [],
 		sujets: [],
 		user: {},
 		isLogIn: false
@@ -22,20 +23,40 @@ export default new Vuex.Store({
 		SET_USER(state, user) {
 			if (user) {
 				state.user = user
+				state.isLogIn = true
 			} else {
 				state.user = {}
+				state.isLogIn = false
 			}
-		},
-
-		IS_LOGIN(state, val) {
-			state.isLogIn = val
 		}
 	},
+
+	getters: {},
 
 	actions: {
 		init: firebaseAction(({ bindFirebaseRef }) => {
 			bindFirebaseRef("sujets", db.collection("sujets"))
 		}),
+
+		/* initPosts: firebaseAction(({ bindFirebaseRef }) => {
+			bindFirebaseRef("posts", db.collection("posts"))
+		}), */
+
+		async createNewPost({ commit }, post) {
+			const res = db.collection("posts").doc()
+			post.id = res.id
+			//post.sujet_id=......
+			post.user_id = firebase.auth().currentUser.uid
+			post.created_at = firebase.firestore.FieldValue.serverTimestamp()
+			try {
+				await db
+					.collection("posts")
+					.doc(post.id)
+					.set(post)
+			} catch (error) {
+				console.error(error)
+			}
+		},
 
 		logInWithGoogle({ commit }) {
 			const provider = new firebase.auth.GoogleAuthProvider()
@@ -45,7 +66,6 @@ export default new Vuex.Store({
 				.signInWithPopup(provider)
 				.catch(function(error) {
 					console.log(error)
-					commit("IS_LOGIN", false)
 				})
 		},
 
