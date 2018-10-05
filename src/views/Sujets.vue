@@ -1,8 +1,8 @@
 <template>
     <v-container>
-      <v-layout row wrap justify-center>
-        <v-flex xm12 sm6>
-          <v-card  class="mb-3" v-for="sujet in sujets" :key="sujet.id">
+      <v-layout align-center justify-center row fill-height wrap>
+        <v-flex xm12 sm6 v-off v-for="sujet in sujets" :key="sujet.id">
+          <v-card  class="ma-3">
               <v-card-title primary-title>
                 <div>
                   <h3 class="headline mb-0">{{sujet.name}}</h3>

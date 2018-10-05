@@ -13,6 +13,7 @@ export default new Vuex.Store({
 	state: {
 		posts: [],
 		sujets: [],
+		the_sujet: [],
 		user: {},
 		isLogIn: false
 	},
@@ -31,23 +32,47 @@ export default new Vuex.Store({
 		}
 	},
 
-	getters: {},
+	getters: {
+		getTheSujet(state) {
+			if (state.the_sujet[0]) {
+				return state.the_sujet[0]
+			} else {
+				return {}
+			}
+		},
+		getUser(state) {
+			return state.user
+		}
+	},
 
 	actions: {
 		init: firebaseAction(({ bindFirebaseRef }) => {
 			bindFirebaseRef("sujets", db.collection("sujets"))
 		}),
 
-		/* initPosts: firebaseAction(({ bindFirebaseRef }) => {
-			bindFirebaseRef("posts", db.collection("posts"))
-		}), */
+		initTheSujet: firebaseAction(({ bindFirebaseRef }, name) => {
+			bindFirebaseRef(
+				"the_sujet",
+				db.collection("sujets").where("name", "==", name)
+			)
+		}),
 
-		async createNewPost({ commit }, post) {
+		initPosts: firebaseAction(({ bindFirebaseRef }, sujet_id) => {
+			bindFirebaseRef(
+				"posts",
+				db.collection("posts").where("sujet_id", "==", sujet_id)
+			)
+		}),
+
+		async createNewPost({ commit, getters }, post) {
 			const res = db.collection("posts").doc()
 			post.id = res.id
-			//post.sujet_id=......
+			post.sujet_id = getters.getTheSujet.id
 			post.user_id = firebase.auth().currentUser.uid
+			post.user_name = getters.getUser.name
+			post.user_image = getters.getUser.image
 			post.created_at = firebase.firestore.FieldValue.serverTimestamp()
+
 			try {
 				await db
 					.collection("posts")
