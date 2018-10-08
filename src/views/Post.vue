@@ -5,24 +5,21 @@
       <v-btn v-if="isLogIn" @click="edition=!edition" class='ml-5' color="primary">Edition</v-btn>
     </v-layout>
 
+     <v-layout align-center justify-center row wrap>
+       <v-flex xm12 sm8>
+         <v-text-field
+          v-model="searchTerm"
+          label="Recherche">
+          </v-text-field> 
+       </v-flex>
+    </v-layout>
+
     <v-layout row wrap justify-center>
-      <v-flex xm12 sm6>
+      <v-flex xm12 sm8>
         <v-form v-if='edition' ref="form" v-model="valid" lazy-validation>
-          <!-- <v-text-field
-            v-model="post.name"
-            :rules="champVide"
-            label="Nom"
-            required>
-          </v-text-field>
-
-          <v-text-field
-            v-model="post.prenom"
-            label="Prénom"
-            :rules="champVide"
-            required>
-          </v-text-field> -->
-
+          
           <v-textarea
+            solo
             v-model="post.commentaire"
             placeholder="Décrire brièvement vos actions de la semaine"
             label="Commentaires"
@@ -41,6 +38,7 @@
           </v-btn>
 
           <v-btn 
+            color="error"
             @click="clear">
             Effacer
           </v-btn>
@@ -50,7 +48,7 @@
     </v-layout>
 
       <v-layout align-start justify-start row fill-height wrap>
-        <v-flex xs12 sm4  v-for="post in posts" :key="post.id">
+        <v-flex xs12 sm4  v-for="post in filteredPost" :key="post.id">
         <v-card class="ma-4">
          
         <v-card-title primary-title>
@@ -66,13 +64,48 @@
           </div>
         </v-card-title>
 
-        <v-card-text v-show="show">
+        <v-card-text>
+          <div class="text-xs-left">
+            <v-badge v-if="post.visa"
+            color="green"
+            left
+            overlap>
+              <v-icon
+              slot="badge"
+              dark
+              small>done
+              </v-icon>
+              <v-icon
+              large
+              color="grey darken-1">
+              markunread
+              </v-icon>
+          </v-badge>
+          <v-badge v-else
+            overlap
+            color="orange">
+              <v-icon
+              slot="badge"
+              dark
+              small>notifications
+              </v-icon>
+              <v-icon
+              large
+              color="grey darken-1">
+              mail
+              </v-icon>
+          </v-badge>
+          </div>
+          
             {{post.commentaire}}
           </v-card-text>
 
-        <v-card-actions>
-          <v-btn icon>
-            <v-icon>bookmark</v-icon>
+        <v-card-actions v-if=isAdmin>
+
+          <v-btn 
+            flat icon
+            @click="onVisa(post)">
+            <v-icon>supervisor_account</v-icon>
           </v-btn>
         </v-card-actions>
 
@@ -93,6 +126,7 @@ export default {
 
 	data() {
 		return {
+			searchTerm: "",
 			show: true,
 			valid: false,
 			edition: false,
@@ -107,8 +141,6 @@ export default {
 			],
 
 			post: {
-				name: "",
-				prenom: "",
 				commentaire: ""
 			}
 		}
@@ -128,14 +160,41 @@ export default {
 		this.initTheSujet(this.$route.params.name)
 	},
 	computed: {
-		...mapState(["isLogIn", "posts"]),
+		...mapState(["isLogIn", "posts", "user"]),
+
 		...mapGetters({
 			the_sujet: "getTheSujet"
-		})
+		}),
+
+		filteredPost() {
+			if (this.searchTerm) {
+				const regexp = new RegExp(this.searchTerm, "gi")
+
+				return this.posts.filter(post => post.user_name.match(regexp))
+			}
+			return this.posts
+		},
+
+		isAdmin() {
+			if (this.user.name === "Adelino DeCarvalho") {
+				return true
+			}
+			return false
+		}
 	},
 
 	methods: {
-		...mapActions(["createNewPost", "initTheSujet", "initPosts"]),
+		...mapActions([
+			"createNewPost",
+			"initTheSujet",
+			"initPosts",
+			"setPostVisa"
+		]),
+
+		onVisa(post) {
+			console.log(post.id)
+			this.setPostVisa(post.id)
+		},
 
 		getDate(val) {
 			const options = {

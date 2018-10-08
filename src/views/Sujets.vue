@@ -14,8 +14,8 @@
                 <v-btn 
                 :to="{name:'post',
                 params:{name:sujet.name}}"
-                flat 
-                color="orange">
+                
+                color="primary">
                 Ouvrir
                 </v-btn>
               </v-card-actions>

@@ -1,10 +1,10 @@
 <template>
   <v-container>
     <v-responsive>
-      <v-container fill-height>
+      <v-container fill-height class='text-xs-center'>
         <v-layout align-center>
          <v-flex>
-          <h3 class="display-3">Messages Board</h3>
+          <h3 class="display-3">Projets Tutorés Board</h3>
 
           <span class="subheading"> Interface Web pour le suivi des projets tutorés.</span>
 

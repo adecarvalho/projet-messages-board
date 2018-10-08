@@ -71,6 +71,7 @@ export default new Vuex.Store({
 			post.user_id = firebase.auth().currentUser.uid
 			post.user_name = getters.getUser.name
 			post.user_image = getters.getUser.image
+			post.visa = false
 			post.created_at = firebase.firestore.FieldValue.serverTimestamp()
 
 			try {
@@ -78,6 +79,17 @@ export default new Vuex.Store({
 					.collection("posts")
 					.doc(post.id)
 					.set(post)
+			} catch (error) {
+				console.error(error)
+			}
+		},
+
+		async setPostVisa({ commit }, post_id) {
+			try {
+				await db
+					.collection("posts")
+					.doc(post_id)
+					.update({ visa: true })
 			} catch (error) {
 				console.error(error)
 			}
