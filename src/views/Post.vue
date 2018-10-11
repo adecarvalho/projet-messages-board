@@ -2,7 +2,7 @@
   <v-container>
     <v-layout align-center justify-center row fill-height wrap>
       <h1>{{$route.params.name}}</h1>
-      <v-btn v-if="isLogIn" @click="edition=!edition" class='ml-5' color="primary">Edition</v-btn>
+      <v-btn v-if="isLogIn" @click="edition = !edition" class='ml-5' color="primary">Edition</v-btn>
     </v-layout>
 
      <v-layout align-center justify-center row wrap>
@@ -31,7 +31,7 @@
           </v-textarea>
 
           <v-btn
-            :enabled="valid"
+            :disabled="!valid"
             color="success"
             @click="envoyerPost">
             Envoyer
@@ -100,7 +100,7 @@
             {{post.commentaire}}
           </v-card-text>
 
-        <v-card-actions v-if=isAdmin>
+        <v-card-actions v-if=user.isAdmin>
 
           <v-btn 
             flat icon
@@ -128,11 +128,11 @@ export default {
 		return {
 			searchTerm: "",
 			show: true,
-			valid: false,
+			valid: true,
 			edition: false,
 			champVide: [
 				val => {
-					if (val === "") {
+					if (val.length == 0) {
 						return "Erreure saisie"
 					} else {
 						return true
@@ -176,7 +176,7 @@ export default {
 		},
 
 		isAdmin() {
-			if (this.user.name === "Adelino DeCarvalho") {
+			if (this.user.isAdmin) {
 				return true
 			}
 			return false
@@ -192,7 +192,6 @@ export default {
 		]),
 
 		onVisa(post) {
-			console.log(post.id)
 			this.setPostVisa(post.id)
 		},
 
@@ -210,11 +209,12 @@ export default {
 
 		async envoyerPost() {
 			if (this.$refs.form.validate()) {
-				console.log("envoyer ")
-
+				//console.log("envoyer ")
 				await this.createNewPost(this.post)
 				this.$refs.form.reset()
 				this.edition = false
+				this.post.commentaire = ""
+				this.valid = false
 			}
 		},
 		clear() {

@@ -9,14 +9,20 @@ firebase.auth().onAuthStateChanged(user => {
 		if (user.user) {
 			user = user.user
 		}
-		// console.log(user.uid)
-		// console.log(user.displayName)
+		//console.log(user)
+		//console.log(user.displayName)
 		// console.log(user.photoURL)
+		let admin = false
+
+		if (user.displayName === "Adelino DeCarvalho") {
+			admin = true
+		}
 
 		const zeuser = {
 			id: user.uid,
 			name: user.displayName,
 			image: user.photoURL,
+			isAdmin: admin,
 			create_at: firebase.firestore.FieldValue.serverTimestamp()
 		}
 

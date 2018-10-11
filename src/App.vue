@@ -18,15 +18,22 @@
 
         <v-toolbar-items>
 
+        <v-btn 
+          :to="{name:'sujets'}"
+          flat @click="logSujets">
+          <v-icon left dark>view_list</v-icon>
+          Sujets
+        </v-btn>
+
           <v-btn flat @click.prevent="logInWithGoogle" v-if="!isLogIn">
             <v-icon left dark>assignment_ind</v-icon>
             Connexion Google
-            </v-btn>
+          </v-btn>
 
           <v-btn flat @click="logOut" v-if="isLogIn">
             <v-icon left dark>person_add_disabled</v-icon>
             Deconnexion
-            </v-btn>
+          </v-btn>
           
         </v-toolbar-items>
     </v-toolbar>

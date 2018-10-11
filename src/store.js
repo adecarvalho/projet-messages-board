@@ -72,6 +72,7 @@ export default new Vuex.Store({
 			post.user_name = getters.getUser.name
 			post.user_image = getters.getUser.image
 			post.visa = false
+			post.remarques = ""
 			post.created_at = firebase.firestore.FieldValue.serverTimestamp()
 
 			try {
