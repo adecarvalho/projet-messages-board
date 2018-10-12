@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout align-center justify-center row fill-height wrap>
-      <h1>{{$route.params.post_id}}</h1>
+      <h1>{{this.the_sujet[0].name}}</h1>
       
     </v-layout>
 
