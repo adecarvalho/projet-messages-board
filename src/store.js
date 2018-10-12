@@ -1,11 +1,11 @@
-import Vue from "vue"
-import Vuex from "vuex"
-import router from "@/router"
+import Vue from 'vue'
+import Vuex from 'vuex'
+import router from '@/router'
 
-import firebase from "@/firebase"
-import db from "@/db"
+import firebase from '@/firebase'
+import db from '@/db'
 
-import { firebaseMutations, firebaseAction } from "vuexfire"
+import { firebaseMutations, firebaseAction } from 'vuexfire'
 
 Vue.use(Vuex)
 
@@ -47,37 +47,37 @@ export default new Vuex.Store({
 
 	actions: {
 		init: firebaseAction(({ bindFirebaseRef }) => {
-			bindFirebaseRef("sujets", db.collection("sujets"))
+			bindFirebaseRef('sujets', db.collection('sujets'))
 		}),
 
 		initTheSujet: firebaseAction(({ bindFirebaseRef }, name) => {
 			bindFirebaseRef(
-				"the_sujet",
-				db.collection("sujets").where("name", "==", name)
+				'the_sujet',
+				db.collection('sujets').where('name', '==', name)
 			)
 		}),
 
 		initPosts: firebaseAction(({ bindFirebaseRef }, sujet_id) => {
 			bindFirebaseRef(
-				"posts",
-				db.collection("posts").where("sujet_id", "==", sujet_id)
+				'posts',
+				db.collection('posts').where('sujet_id', '==', sujet_id)
 			)
 		}),
 
 		async createNewPost({ commit, getters }, post) {
-			const res = db.collection("posts").doc()
+			const res = db.collection('posts').doc()
 			post.id = res.id
 			post.sujet_id = getters.getTheSujet.id
 			post.user_id = firebase.auth().currentUser.uid
 			post.user_name = getters.getUser.name
 			post.user_image = getters.getUser.image
 			post.visa = false
-			post.remarques = ""
+			post.remarques = ''
 			post.created_at = firebase.firestore.FieldValue.serverTimestamp()
 
 			try {
 				await db
-					.collection("posts")
+					.collection('posts')
 					.doc(post.id)
 					.set(post)
 			} catch (error) {
@@ -85,12 +85,15 @@ export default new Vuex.Store({
 			}
 		},
 
-		async setPostVisa({ commit }, post_id) {
+		async setPostVisa({ commit }, visa) {
 			try {
 				await db
-					.collection("posts")
-					.doc(post_id)
-					.update({ visa: true })
+					.collection('posts')
+					.doc(visa.post_id)
+					.update({
+						visa: true,
+						remarques: visa.les_remarques
+					})
 			} catch (error) {
 				console.error(error)
 			}

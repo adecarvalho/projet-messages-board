@@ -26,18 +26,18 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex"
+import { mapActions, mapState } from 'vuex'
 
 export default {
-	name: "sujets",
+	name: 'sujets',
 	mounted() {
 		this.init()
 	},
 	computed: {
-		...mapState(["sujets"])
+		...mapState(['sujets'])
 	},
 	methods: {
-		...mapActions(["init"])
+		...mapActions(['init'])
 	}
 }
 </script>

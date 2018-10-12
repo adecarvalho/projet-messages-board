@@ -98,13 +98,21 @@
           </div>
           
             {{post.commentaire}}
+            <hr/>
+
+            <div class="remarques">
+              {{post.remarques}}
+            </div>
+
           </v-card-text>
 
         <v-card-actions v-if=user.isAdmin>
 
           <v-btn 
             flat icon
-            @click="onVisa(post)">
+            :to="{name:'visa',
+                params:{post_id:post.id}}"
+            >
             <v-icon>supervisor_account</v-icon>
           </v-btn>
         </v-card-actions>
@@ -119,21 +127,21 @@
 
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex"
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-	name: "post",
+	name: 'post',
 
 	data() {
 		return {
-			searchTerm: "",
+			searchTerm: '',
 			show: true,
 			valid: true,
 			edition: false,
 			champVide: [
 				val => {
 					if (val.length == 0) {
-						return "Erreure saisie"
+						return 'Erreure saisie'
 					} else {
 						return true
 					}
@@ -141,12 +149,12 @@ export default {
 			],
 
 			post: {
-				commentaire: ""
+				commentaire: ''
 			}
 		}
 	},
 	watch: {
-		"$route.params.name"() {
+		'$route.params.name'() {
 			this.initTheSujet(this.$route.params.name)
 		},
 
@@ -160,15 +168,15 @@ export default {
 		this.initTheSujet(this.$route.params.name)
 	},
 	computed: {
-		...mapState(["isLogIn", "posts", "user"]),
+		...mapState(['isLogIn', 'posts', 'user']),
 
 		...mapGetters({
-			the_sujet: "getTheSujet"
+			the_sujet: 'getTheSujet'
 		}),
 
 		filteredPost() {
 			if (this.searchTerm) {
-				const regexp = new RegExp(this.searchTerm, "gi")
+				const regexp = new RegExp(this.searchTerm, 'gi')
 
 				return this.posts.filter(post => post.user_name.match(regexp))
 			}
@@ -185,10 +193,10 @@ export default {
 
 	methods: {
 		...mapActions([
-			"createNewPost",
-			"initTheSujet",
-			"initPosts",
-			"setPostVisa"
+			'createNewPost',
+			'initTheSujet',
+			'initPosts',
+			'setPostVisa'
 		]),
 
 		onVisa(post) {
@@ -197,14 +205,14 @@ export default {
 
 		getDate(val) {
 			const options = {
-				weekday: "long",
-				year: "numeric",
-				month: "long",
-				day: "numeric"
+				weekday: 'long',
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
 			}
 			const date = new Date(val * 1000)
 
-			return date.toLocaleDateString("fr-FR", options)
+			return date.toLocaleDateString('fr-FR', options)
 		},
 
 		async envoyerPost() {
@@ -213,7 +221,7 @@ export default {
 				await this.createNewPost(this.post)
 				this.$refs.form.reset()
 				this.edition = false
-				this.post.commentaire = ""
+				this.post.commentaire = ''
 				this.valid = false
 			}
 		},
@@ -223,4 +231,12 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+.remarques {
+	color: #a11919;
+	text-align: left;
+}
+</style>
+
 
