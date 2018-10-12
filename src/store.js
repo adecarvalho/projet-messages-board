@@ -11,8 +11,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
-		posts: [],
-		sujets: [],
+		posts: null,
+		sujets: null,
 		the_sujet: [],
 		user: {},
 		isLogIn: false

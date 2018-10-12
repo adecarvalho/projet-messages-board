@@ -1,7 +1,7 @@
 <template>
     <v-container>
       <v-layout align-center justify-center row fill-height wrap>
-        <v-flex xm12 sm3 v-off v-for="sujet in sujets" :key="sujet.id">
+        <v-flex xm12 sm3 v-off v-for="sujet in sujets" :key="sujet.id" v-if='sujets'>
           <v-card  class="ma-3">
               <v-card-title primary-title>
                 <div>

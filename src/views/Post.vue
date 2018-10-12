@@ -4,8 +4,8 @@
       <h1>{{$route.params.name}}</h1>
       <!-- <v-btn v-if="isLogIn" @click="edition = !edition" class='ml-5' color="primary">Commentaires</v-btn> -->
 
-      <v-btn v-if='isLogIn' fab dark color="purple"
-      @click='edition = !edition'>
+      <v-btn v-if="isLogIn" fab dark color="purple"
+      @click="edition = !edition">
       <v-icon dark>edit</v-icon>
     </v-btn>
     </v-layout>
@@ -55,7 +55,7 @@
     </v-layout>
 
       <v-layout align-start justify-start row fill-height wrap>
-        <v-flex xs12 sm4  v-for="post in filteredPost" :key="post.id">
+        <v-flex xs12 sm4  v-for="post in filteredPost" :key="post.id" v-if="filteredPost">
         <v-card class="ma-4">
          
         <v-card-title primary-title>
@@ -166,7 +166,7 @@ export default {
 		},
 
 		the_sujet() {
-			if (this.the_sujet.id) {
+			if (this.the_sujet.id && this.the_sujet) {
 				this.initPosts(this.the_sujet.id)
 			}
 		}
@@ -185,7 +185,9 @@ export default {
 			if (this.searchTerm) {
 				const regexp = new RegExp(this.searchTerm, 'gi')
 
-				return this.posts.filter(post => post.user_name.match(regexp))
+				if (this.posts) {
+					return this.posts.filter(post => post.user_name.match(regexp))
+				} else return null
 			}
 			return this.posts
 		},

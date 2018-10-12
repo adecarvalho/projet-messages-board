@@ -20,7 +20,7 @@
 
         <v-btn 
           :to="{name:'sujets'}"
-          flat @click="logSujets">
+          flat >
           <v-icon left dark>view_list</v-icon>
           Sujets
         </v-btn>
@@ -48,19 +48,19 @@
 </template>
 
 <script>
-import Footer from "@/components/Footer.vue"
-import { mapActions, mapState } from "vuex"
+import Footer from '@/components/Footer.vue'
+import { mapActions, mapState } from 'vuex'
 
 export default {
-	name: "App",
+	name: 'App',
 	components: {
 		Footer
 	},
 	computed: {
-		...mapState(["user", "isLogIn"])
+		...mapState(['user', 'isLogIn'])
 	},
 	methods: {
-		...mapActions(["logInWithGoogle", "logOut"])
+		...mapActions(['logInWithGoogle', 'logOut'])
 	}
 }
 </script>
