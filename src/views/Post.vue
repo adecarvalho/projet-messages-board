@@ -2,7 +2,12 @@
   <v-container>
     <v-layout align-center justify-center row fill-height wrap>
       <h1>{{$route.params.name}}</h1>
-      <v-btn v-if="isLogIn" @click="edition = !edition" class='ml-5' color="primary">Edition</v-btn>
+      <!-- <v-btn v-if="isLogIn" @click="edition = !edition" class='ml-5' color="primary">Commentaires</v-btn> -->
+
+      <v-btn v-if='isLogIn' fab dark color="purple"
+      @click='edition = !edition'>
+      <v-icon dark>edit</v-icon>
+    </v-btn>
     </v-layout>
 
      <v-layout align-center justify-center row wrap>
@@ -32,6 +37,7 @@
 
           <v-btn
             :disabled="!valid"
+            round
             color="success"
             @click="envoyerPost">
             Envoyer
@@ -39,6 +45,7 @@
 
           <v-btn 
             color="error"
+            round
             @click="clear">
             Effacer
           </v-btn>

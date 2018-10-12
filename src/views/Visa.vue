@@ -10,6 +10,7 @@
         <v-form ref="form">
           
           <v-textarea
+						 box
             label='Remarques'
             v-model='visa.les_remarques'
             >
