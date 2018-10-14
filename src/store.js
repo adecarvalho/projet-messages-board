@@ -11,9 +11,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
-		posts: null,
-		sujets: null,
+		posts: [],
+		sujets: [],
 		the_sujet: [],
+		the_post: [],
 		user: {},
 		isLogIn: false
 	},
@@ -40,12 +41,21 @@ export default new Vuex.Store({
 				return {}
 			}
 		},
+		getThePost(state) {
+			if (state.the_post[0]) {
+				return state.the_post[0]
+			} else {
+				return {}
+			}
+		},
+
 		getUser(state) {
 			return state.user
 		}
 	},
 
 	actions: {
+		//
 		init: firebaseAction(({ bindFirebaseRef }) => {
 			bindFirebaseRef('sujets', db.collection('sujets'))
 		}),
@@ -61,6 +71,13 @@ export default new Vuex.Store({
 			bindFirebaseRef(
 				'posts',
 				db.collection('posts').where('sujet_id', '==', sujet_id)
+			)
+		}),
+
+		getPostById: firebaseAction(({ bindFirebaseRef }, post_id) => {
+			bindFirebaseRef(
+				'the_post',
+				db.collection('posts').where('id', '==', post_id)
 			)
 		}),
 

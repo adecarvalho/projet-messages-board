@@ -2,7 +2,6 @@
   <v-container>
     <v-layout align-center justify-center row fill-height wrap>
       <h1>{{this.the_sujet[0].name}}</h1>
-      
     </v-layout>
 
     <v-layout row wrap justify-center>
@@ -31,7 +30,7 @@
 
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
 	name: 'visa',
@@ -44,18 +43,32 @@ export default {
 			}
 		}
 	},
+
+	watch: {
+		the_post() {
+			this.visa.les_remarques = this.the_post.remarques
+		}
+	},
 	computed: {
-		...mapState(['the_sujet'])
+		...mapState(['the_sujet']),
+
+		...mapGetters({
+			the_post: 'getThePost'
+		})
+	},
+	mounted() {
+		this.getPostById(this.$route.params.post_id)
 	},
 
 	methods: {
-		...mapActions(['setPostVisa']),
+		...mapActions(['setPostVisa', 'getPostById']),
+		//
 		envoyerVisa(id) {
 			this.visa.post_id = id
 
 			this.setPostVisa(this.visa)
 
-			this.visa.les_remarques = ''
+			this.les_remarques = ''
 
 			//this.$router.push(`/sujet/${this.the_sujet[0].name}`)
 			this.$router.push({
